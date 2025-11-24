@@ -1,0 +1,20 @@
+.ims-dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+.ims-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 8px; padding: 18px; box-shadow: 0 6px 18px rgba(0,0,0,0.03); margin-top:5px;}
+.ims-card h2 { margin-top: 0; border-bottom: 1px solid #f1f1f1; padding-bottom: 10px; font-size: 18px; }
+.ims-active-users { list-style: none; padding: 0; margin: 0; }
+.ims-active-users li { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f6f6f6; }
+.ims-stats-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; text-align:center; }
+.ims-stat { padding:14px; background:#fbfbfb; border-radius:6px; min-height:70px; display:flex; flex-direction:column; justify-content:center; }
+.ims-stat-number { font-size:22px; font-weight:700; color:#21759b; }
+.ims-stat-label { font-size:11px; text-transform:uppercase; color:#777; margin-top:6px; }
+
+.ims-pending-indicator { background:#ff5a5f; color:#fff; padding:4px 8px; border-radius:4px; font-size:13px; margin-left:10px; }
+.ims-pending-small { background:#ff5a5f; color:#fff; padding:2px 6px; border-radius:3px; font-size:12px; margin-left:8px; }
+
+.ims-admin-toggle { transform:scale(1.1); }
+
+.ims-logs-scroll { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.2) transparent; }
+
+.wp-list-table td { vertical-align: middle; }
+
+@media (max-width:1200px) { .ims-dashboard { grid-template-columns: 1fr; } }
