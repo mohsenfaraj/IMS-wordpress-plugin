@@ -77,6 +77,7 @@ jQuery(document).ready(function ($) {
     layout: {
       topStart: "buttons",
     },
+    order: [],
   });
   console.log("test");
 });

@@ -2,15 +2,17 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-
 class IMS_Telegram_Bot
 {
-    private $token;
+    private $api;
 
     public function __construct()
     {
-        $this->token = get_option('ims_telegram_bot_token');
-
+        $token = get_option('ims_telegram_bot_token');
+        if (empty($token))
+            throw new Exception('Token is not set');
+        $bridge = get_option('ims_bridge', '');
+        $this->api = "$bridge/bot$token/" ?: "https://api.telegram.org/bot$token/";
         add_action('wp_ajax_ims_webhook', array($this, 'handle_webhook'));
         add_action('wp_ajax_nopriv_ims_webhook', array($this, 'handle_webhook'));
 
@@ -223,10 +225,7 @@ class IMS_Telegram_Bot
 
     public function send_message($chat_id, $text, $reply_markup = null)
     {
-        if (!$this->token)
-            return false;
-
-        $url = "https://api.telegram.org/bot{$this->token}/sendMessage";
+        $url = "{$this->api}/sendMessage";
         $data = ['chat_id' => $chat_id, 'text' => $text, 'parse_mode' => 'HTML'];
         if ($reply_markup)
             $data['reply_markup'] = json_encode($reply_markup);
@@ -240,20 +239,20 @@ class IMS_Telegram_Bot
         return !is_wp_error($response);
     }
 
-    public static function set_webhook($token)
+    public static function set_webhook($token, $bridge)
     {
         $webhook_url = rest_url('ims/v1/webhook');
-        $url = "https://api.telegram.org/bot{$token}/setWebhook?url=" . urlencode($webhook_url);
+        $url = ($bridge ?: "https://api.telegram.org/") . "bot" . $token . "/setWebhook?url=" . urlencode($webhook_url);
         $response = wp_remote_get($url);
         if (is_wp_error($response))
             return false;
         $body = json_decode(wp_remote_retrieve_body($response), true);
-        return $body['ok'] ?? false;
+        return $body;
     }
 
-    public static function delete_webhook($token)
+    public static function delete_webhook($token, $bridge)
     {
-        $url = "https://api.telegram.org/bot{$token}/deleteWebhook";
+        $url = ($bridge ?: "https://api.telegram.org/") . "bot" . $token . "/deleteWebhook";
         $response = wp_remote_get($url);
         if (is_wp_error($response))
             return false;
